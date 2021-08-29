@@ -45,9 +45,9 @@ function App() {
             <Route path="/UpdateSeance/:id" component={UpdateSeance} ></Route>
 
             <Route path="/plannings" component={ListPlanningComponent} ></Route>
-            <Route path="/planningCahier/:id" component={PlanningCahierComponent} ></Route>
+            {/* <Route path="/planningCahier/:id" component={PlanningCahierComponent} ></Route> */}
             <Route path="/AddPlanning/:id" component={AddPlanningComponent} ></Route>
-            
+
 
             <Route path="/ViewPhase/:id" component={ViewPhaseComponent} ></Route>
             <Route path="/ViewSeance/:id" component={ViewSeanceComponent} ></Route>

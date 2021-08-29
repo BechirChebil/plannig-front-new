@@ -96,7 +96,8 @@ class ViewPlanningComponent extends Component {
         )
     }
     render() {
-
+        var dots = "...";
+        const limit = "100"
         const { planning } = this.state;
         // planning.seances.map(e=>e.id);
         // console.log("2", this.state.planning);
@@ -117,15 +118,15 @@ class ViewPlanningComponent extends Component {
                             <input className="form-control" disabled
                                 value={this.state.planning.titre} />
                         </div><br />
-                        <div className="form-group">
+                        <div className="row">
                             <label>sujet:</label>
                             <textarea className="form-control" disabled
                                 value={this.state.planning.sujet} />
                         </div><br />
-                        <div className="form-group">
+                        <div className="row">
                             <label>introduction:</label>
-                            <textarea  className="form-control" disabled
-                                value={this.state.planning.introduction}/>
+                            <textarea className="form-control" disabled
+                                value={this.state.planning.introduction} />
                         </div><br />
 
                         <div className="row">
@@ -134,7 +135,7 @@ class ViewPlanningComponent extends Component {
                                 value={this.state.planning.startTime} />
                         </div>
                         <br></br>
-                        <button className="btn btn-primary" onClick={this.viewCahier.bind(this)} style={{ width: "100%" }} >Notebook</button>
+                        {/* <button className="btn btn-primary" onClick={this.viewCahier.bind(this)} style={{ width: "100%" }} >Notebook</button> */}
 
                     </div>
                 </div>
@@ -177,7 +178,7 @@ class ViewPlanningComponent extends Component {
                                     ''
                                 }
                             </th>
-                            <th onClick={() => this.sortByHandler('date')} >
+                            <th onClick={() => this.sortByHandler('date')} style={{ minWidth: "150px" }}>
                                 date
                                 {this.state.sortby === 'date' ?
                                     (this.state.direction === 'asc' ? <FaArrowUp /> : <FaArrowDown />) :
@@ -192,7 +193,8 @@ class ViewPlanningComponent extends Component {
                                 }
                             </th>
 
-                            <th>Actions</th>
+                            <th style={{ minWidth: "280px" }}>Actions</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -200,16 +202,22 @@ class ViewPlanningComponent extends Component {
 
                             this.state.planning.titre != null ? this.state.planning.seances.map(
                                 seance =>
-                                    <tr key={seance.id}>
+                                    <tr key={seance.id} >
                                         <td>{seance.titre} </td>
-                                        <td>{seance.objectif} </td>
-                                        <td>{seance.indicationTuteur} </td>
-                                        <td>{seance.indicationEtudiant} </td>
+                                        <td>{seance.objectif.length > limit ?
+                                            seance.objectif.substring(0, limit) + dots : seance.objectif
+                                        } </td>
+                                        <td>{seance.indicationTuteur.length > limit ?
+                                            seance.indicationTuteur.substring(0, limit) + dots : seance.indicationTuteur
+                                        } </td>
+                                        <td>{seance.indicationEtudiant.length > limit ?
+                                            seance.indicationEtudiant.substring(0, limit) + dots : seance.indicationEtudiant
+                                        }  </td>
 
-                                        <td>{seance.date} </td>
+                                        <td style={{ minWidth: "150px" }}>{seance.date} </td>
                                         <td>{seance.creneau} </td>
 
-                                        <td>
+                                        <td style={{ minWidth: "280px" }}>
                                             <button onClick={() => this.editSeance(seance.id)} className="btn btn-info">Update</button>
                                             <button style={{ marginLeft: "10px" }} onClick={() => {
                                                 if (window.confirm('Are you sure you wish to delete this item?'))

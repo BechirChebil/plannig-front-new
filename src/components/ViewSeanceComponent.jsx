@@ -61,6 +61,8 @@ class ViewSeanceComponent extends Component {
     }
 
     render() {
+        var dots = "...";
+        const limit = "100"
         const { seance } = this.state;
         // console.log(seance.planning);
         // let planning_obj = { id: this.state.seance.planning }
@@ -137,10 +139,10 @@ class ViewSeanceComponent extends Component {
                                 <th>Titre</th>
                                 <th>Discription</th>
                                 <th>Rendu</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
+                                <th style={{ minWidth: "150px" }}>Start Time</th>
+                                <th style={{ minWidth: "150px" }}>End Time</th>
                                 {/* <th>Seance id</th> */}
-                                <th>Actions</th>
+                                <th style={{ minWidth: "280px" }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -149,7 +151,9 @@ class ViewSeanceComponent extends Component {
                                     phase =>
                                         <tr key={phase.id}>
                                             <td>{phase.titre} </td>
-                                            <td>{phase.discription} </td>
+                                            <td>{phase.discription.length > limit ?
+                                                phase.discription.substring(0, limit) + dots : phase.discription
+                                            } </td>
                                             <td style={{ maxWidth: "200px" }}>{phase.rendu} </td>
                                             <td>{phase.startTime} </td>
                                             <td>{phase.endTime} </td>

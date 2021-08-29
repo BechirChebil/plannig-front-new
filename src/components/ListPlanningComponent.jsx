@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PlanningService from '../services/PlanningService';
-import CahierService from '../services/CahierService';
 
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
@@ -18,7 +17,6 @@ class ListPlanningComponent extends Component {
             plannings: [],
             direction: 'asc',
             sortby: "",
-            cahier: null,
             resData: null
         }
         this.addPlanning = this.addPlanning.bind(this);
@@ -92,171 +90,247 @@ class ListPlanningComponent extends Component {
         },
         )
     }
+    // htmlToPdfContent = (planning) => {
+    //     return (
+    //         <div>
+    //             Title
+    //             <p>description</p>
+    //         </div>
+    //     )
+    // }
     //////generat fuction
     exportPDF = (id, indice) => {
         PlanningService.getPlanningById(id).then((res) => {
             this.setState({ resData: res.data })
         }).then(() => {
-            CahierService.getCahierByPlanning(this.state.resData).then((res) => {
-                if (res.data.length > 0) {
-                    this.setState({ cahier: res.data[0] })
-                }
-            }).then(() => {
-                var resData = this.state.resData
-                var cahier = this.state.cahier
 
-                const unit = "pt";
-                const size = "A4"; // Use A1, A2, A3 or A4
-                const orientation = "portrait"; // portrait or landscape
+            var resData = this.state.resData
 
-                const marginLeft = 40;
-                const doc = new jsPDF(orientation, unit, size);
-                var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
-                var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-                doc.setFontSize(15);
+            const unit = "pt";
+            const size = "A4"; // Use A1, A2, A3 or A4
+            const orientation = "portrait"; // portrait or landscape
 
-                const title = resData.titre + " " + resData.startTime;
+            const marginLeft = 40;
+            const doc = new jsPDF(orientation, unit, size);
+            var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+            var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
 
-                var resDataSorted = this.sortByHandler("date", resData)
-                var result = []
-                var res
-                var column
-                for (var i = 0; i < 4; i++) {
-                    if (i == 0) {
-                        res = resDataSorted.seances.map(seance => {
-                            return seance.date?.slice(0, 10) + " " + seance.creneau + "\n" + seance.titre
-                        }
-                        )
-                        column = [
-                            '',
-                            ...res
-                        ]
-                        result = [...result, column]
-                    } else if (i == 1) {
-                        res = resDataSorted.seances.map(seance => {
-                            return seance.objectif
-                        }
-                        )
-                        column = [
-                            'OBJECTIFS',
-                            ...res
-                        ]
-                        result = [...result, column]
+            const title = resData.titre + " " + resData.startTime;
+
+            var resDataSorted = this.sortByHandler("date", resData)
+            var result = []
+            var res
+            var column
+            for (var i = 0; i < 4; i++) {
+                if (i == 0) {
+                    res = resDataSorted.seances.map(seance => {
+                        return seance.date?.slice(0, 10) + " " + seance.creneau + "\n" + seance.titre
                     }
-                    else if (i == 2) {
-                        res = resDataSorted.seances.map(seance => {
-                            return seance.phases.map(phase =>
-                                phase.startTime?.slice(11, 16) + " => " +
-                                phase.endTime?.slice(11, 16) + ": " +
-                                phase.titre +
-                                "\n").join("")
-                        }
-                        )
-                        column = [
-                            'PHASES',
-                            ...res
-                        ]
-                        result = [...result, column]
-                    } else if (i == 3) {
-                        res = resDataSorted.seances.map(seance => {
-                            return seance.phases.map(phase =>
-                                phase.rendu + "\n").join("")
-                        }
-                        )
-                        column = [
-                            'RENDUS',
-                            ...res
-                        ]
-                        result = [...result, column]
+                    )
+                    column = [
+                        '',
+                        ...res
+                    ]
+                    result = [...result, column]
+                } else if (i == 1) {
+                    res = resDataSorted.seances.map(seance => {
+                        return seance.objectif
                     }
+                    )
+                    column = [
+                        'OBJECTIFS',
+                        ...res
+                    ]
+                    result = [...result, column]
                 }
+                else if (i == 2) {
+                    res = resDataSorted.seances.map(seance => {
+                        return seance.phases.map(phase =>
+                            phase.startTime?.slice(11, 16) + " => " +
+                            phase.endTime?.slice(11, 16) + ": " +
+                            phase.titre +
+                            "\n").join("")
+                    }
+                    )
+                    column = [
+                        'PHASES',
+                        ...res
+                    ]
+                    result = [...result, column]
+                } else if (i == 3) {
+                    res = resDataSorted.seances.map(seance => {
+                        return seance.phases.map(phase =>
+                            phase.rendu + "\n").join("")
+                    }
+                    )
+                    column = [
+                        'RENDUS',
+                        ...res
+                    ]
+                    result = [...result, column]
+                }
+            }
 
-                let content = {
-                    columnStyles: {
-                        0: {
-                            halign: 'center',
-                            fillColor: [150, 150, 255],
-                            textColor: [255, 255, 255],
-                            fontStyle: 'bold',
-                            fontSize: 12,
-                            lineWidth: 1
+            let content = {
+                columnStyles: {
+                    0: {
+                        halign: 'center',
+                        fillColor: [150, 150, 255],
+                        textColor: [255, 255, 255],
+                        fontStyle: 'bold',
+                        fontSize: 12,
+                        lineWidth: 1
+                    }
+                }, // Cells in first column centered and green
+                startY: 60,
+                body: result
+            };
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.setTextColor("#2E8BC0")
+            doc.text(title, pageWidth / 2, 30, { align: 'center' });
+            doc.autoTable(content);
+
+            doc.addPage();
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.setTextColor("#2E8BC0")
+            doc.text("Sujet", pageWidth / 2, 30, { align: 'center' })
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor("#000000")
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor("#000000")
+            doc.setFontSize(12);
+            var splitSujet = doc.splitTextToSize(resData.sujet, pageWidth - 75);
+            var y = 70;
+            for (var i = 0; i < splitSujet.length; i++) {
+                if (y + 10 > pageHeight) {
+                    y = 70;
+                    doc.addPage();
+                }
+                doc.text(30, y, splitSujet[i]);
+                y = y + 15;
+            }
+            doc.addPage();
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.setTextColor("#2E8BC0")
+            doc.text("Introduction", pageWidth / 2, 30, { align: 'center' })
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor("#000000")
+            doc.setFontSize(12);
+            var splitIntro = doc.splitTextToSize(resData.introduction, pageWidth - 75);
+            y = 70;
+            for (var i = 0; i < splitIntro.length; i++) {
+                if (y + 10 > pageHeight) {
+                    y = 70;
+                    doc.addPage();
+                }
+                doc.text(30, y, splitIntro[i]);
+                y = y + 15;
+            }
+
+            if (indice > 0) {
+
+
+                resData.seances.map(seance => {
+                    doc.addPage();
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(18);
+                    doc.setTextColor("#2E8BC0")
+                    y = 70;
+                    var title = seance.date?.slice(0, 10) + " " + seance.creneau + "\n" + seance.titre;
+                    doc.text(title, pageWidth / 2, 30, { align: 'center' });
+                    doc.setTextColor("#000000")
+                    doc.setFontSize(14);
+                    doc.text("Objectif:", 30, y);
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(12);
+                    y = y + 30
+                    var splitObjectif = doc.splitTextToSize(seance.objectif, pageWidth - 30);
+                    for (var i = 0; i < splitObjectif.length; i++) {
+                        if (y + 10 > pageHeight) {
+                            y = 70;
+                            doc.addPage();
                         }
-                    }, // Cells in first column centered and green
-                    startY: 60,
-                    body: result
-                };
-                doc.text(title, marginLeft, 40);
-                doc.autoTable(content);
-                
-                doc.addPage();
-                doc.setFontSize(15);
-                doc.text(resData.sujet, pageWidth / 2, 30, { align: 'center' });
-                doc.setFontSize(12);
-                var splitIntro = doc.splitTextToSize(resData.introduction, pageWidth - 30);
-                doc.text(splitIntro, 30, 70);
-
-
-                if (indice > 0) {
-
-
-                    resData.seances.map(seance => {
-                        doc.addPage();
-                        doc.setFontSize(15);
-
-                        var title = seance.date?.slice(0, 10) + " " + seance.creneau + "\n" + seance.titre;
-                        doc.text(title, pageWidth / 2, 30, { align: 'center' });
+                        doc.text(38, y, splitObjectif[i]);
+                        y = y + 15;
+                    }
+                    y = y + 15
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(14);
+                    doc.text("Indicateur etudiant:", 30, y);
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(12);
+                    y = y + 30
+                    var splitIndEtudiant = doc.splitTextToSize(seance.indicationEtudiant, pageWidth - 30);
+                    for (var i = 0; i < splitIndEtudiant.length; i++) {
+                        if (y + 10 > pageHeight) {
+                            y = 70;
+                            doc.addPage();
+                        }
+                        doc.text(38, y, splitIndEtudiant[i]);
+                        y = y + 15;
+                    }
+                    if (indice == 2) {
+                        y = y + 15
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(14);
+                        doc.text("Indicateur tuteur:", 30, y);
+                        doc.setFont("helvetica", "normal");
                         doc.setFontSize(12);
-                        var splitObjectif = doc.splitTextToSize(resData.objectif, pageWidth - 30);
-                        doc.text(splitObjectif, 30, 70);
-                        var l = 100
-                        seance.phases.map(phase => {
-                            l = l + 120
-                            doc.text(phase.startTime?.slice(11, 16) + " => " +
-                                phase.endTime?.slice(11, 16) + ": " +
-                                phase.titre
-                                , 30, l)
-                            doc.text(phase.discription, 30, l + 30)
-                        })
+                        y = y + 30
+                        var splitIndTuteur = doc.splitTextToSize(seance.indicationTuteur, pageWidth - 30);
+                        for (var i = 0; i < splitIndTuteur.length; i++) {
+                            if (y + 10 > pageHeight) {
+                                y = 70;
+                                doc.addPage();
+                            }
+                            doc.text(38, y, splitIndTuteur[i]);
+                            y = y + 15;
+                        }
+
+                    }
+                    seance.phases.map(phase => {
+                        y = y + 30
+                        if (y + 10 > pageHeight) {
+                            y = 70;
+                            doc.addPage();
+                        }
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(12);
+                        doc.text(phase.startTime?.slice(11, 16) + " => " +
+                            phase.endTime?.slice(11, 16) + ": " +
+                            phase.titre
+                            , 30, y)
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(12);
+                        var splitDescription = doc.splitTextToSize(phase.discription, pageWidth - 30);
+                        y = y + 30;
+                        for (var i = 0; i < splitDescription.length; i++) {
+                            if (y + 10 > pageHeight) {
+                                y = 70;
+                                doc.addPage();
+                            }
+                            doc.text(38, y, splitDescription[i]);
+                            y = y + 15;
+                        }
                     })
-                    if (cahier) {
-                        doc.addPage();
+                })
 
-                        
-                        doc.setTextColor(100);
-                        doc.setFontSize(20);
-                        doc.text(cahier?.introduction, pageWidth / 2, 30, { align: 'center' });
-                        doc.setFontSize(15);
-                        var splitSujet = doc.splitTextToSize(cahier?.sujet, pageWidth - 20);
+            }
 
-                        doc.text(20, 50, splitSujet);
-                        doc.setFontSize(12);
-                        var splitIndEtudiant = doc.splitTextToSize(cahier?.indicationEtudiant, pageWidth - 30);
+            doc.save("report.pdf")
 
-                        doc.text(20, 90, splitIndEtudiant);
-                    }
-                }
-                if (indice == 2) {
-                    if (cahier) {
-                        doc.addPage();
-                        var splitIndtuteur = doc.splitTextToSize(cahier?.indicationsTuteur, pageWidth - 30);
-                        doc.text(20, 90, splitIndtuteur);
-                    }
-
-
-                }
-                doc.save("report.pdf")
-            })
         })
-
 
     }
 
     render() {
         /////////////////
-
         //////////////////////////////////
         return (
-            <div>
+            <div >
                 <h2 className="text-center">list Planning</h2>
                 <button className="btn btn-primary" onClick={this.addPlanning}>Add Planning</button>
                 <br></br><br></br>
@@ -282,7 +356,8 @@ class ListPlanningComponent extends Component {
                                         ''
                                     }
                                 </th>
-                                <th>Actions</th>
+                                <th style={{ minWidth: "280px" }}>Actions</th>
+
                             </tr>
                         </thead>
                         <tbody>
