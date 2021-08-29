@@ -319,8 +319,13 @@ class ListPlanningComponent extends Component {
                 })
 
             }
+            if (indice == 0)
+                doc.save("planning.pdf")
+            else if (indice == 1)
+                doc.save("etudiant.pdf")
+            else
+                doc.save("tuteur.pdf")
 
-            doc.save("report.pdf")
 
         })
 
