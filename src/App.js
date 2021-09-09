@@ -27,10 +27,9 @@ function App() {
   return (
 
     <div>
-      <Router>
-
+      <Router >
         <HeaderComponent />
-        <div className="container">
+        <div className="container"  >
           <Switch>
             <Route path="/" exact component={HomeComponent} ></Route>
 

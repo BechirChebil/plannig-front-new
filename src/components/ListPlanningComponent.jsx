@@ -259,7 +259,7 @@ class ListPlanningComponent extends Component {
                     y = y + 15
                     doc.setFont("helvetica", "bold");
                     doc.setFontSize(14);
-                    doc.text("Indicateur etudiant:", 30, y);
+                    doc.text("Indication pour l'étudiant:", 30, y);
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(12);
                     y = y + 30
@@ -276,7 +276,7 @@ class ListPlanningComponent extends Component {
                         y = y + 15
                         doc.setFont("helvetica", "bold");
                         doc.setFontSize(14);
-                        doc.text("Indicateur tuteur:", 30, y);
+                        doc.text("Indication pour le tuteur:", 30, y);
                         doc.setFont("helvetica", "normal");
                         doc.setFontSize(12);
                         y = y + 30
@@ -299,14 +299,15 @@ class ListPlanningComponent extends Component {
                         }
                         doc.setFont("helvetica", "bold");
                         doc.setFontSize(12);
-                        doc.text(phase.startTime?.slice(11, 16) + " => " +
-                            phase.endTime?.slice(11, 16) + ": " +
-                            phase.titre
-                            , 30, y)
+                        doc.setTextColor("#2E8BC0")
+                        doc.text(phase.titre+ ": " + phase.startTime?.slice(11, 16) + " => " +
+                            phase.endTime?.slice(11, 16)  , 30, y)
+                           
                         doc.setFont("helvetica", "normal");
                         doc.setFontSize(12);
-                        var splitDescription = doc.splitTextToSize(phase.discription, pageWidth - 30);
-                        y = y + 30;
+                        doc.setTextColor("#000000")
+                        var splitDescription = doc.splitTextToSize(phase.discription, pageWidth - 70);
+                        y = y + 15;
                         for (var i = 0; i < splitDescription.length; i++) {
                             if (y + 10 > pageHeight) {
                                 y = 70;
@@ -335,7 +336,8 @@ class ListPlanningComponent extends Component {
         /////////////////
         //////////////////////////////////
         return (
-            <div >
+
+            <div ><br />
                 <h2 className="text-center">list Planning</h2>
                 <button className="btn btn-primary" onClick={this.addPlanning}>Add Planning</button>
                 <br></br><br></br>
@@ -376,16 +378,16 @@ class ListPlanningComponent extends Component {
                                             <td>
                                                 {/* <button onClick={() => this.editPlanning(planning.id)} className="btn btn-info">Update</button> */}
                                                 {/* <button style={{ marginLeft: "10px" }} onClick={() => this.deletePlanning(planning.id)} className="btn btn-danger">Delete</button> */}
-                                                <button style={{ marginLeft: "10px" }} onClick={() => {
-                                                    if (window.confirm('Are you sure you wish to delete this item?'))
-                                                        this.deletePlanning(planning.id)
-                                                }} className="btn btn-danger">Delete</button>
+
                                                 <button style={{ marginLeft: "10px" }} onClick={() => this.viewPlanning(planning.id)} className="btn btn-info">View</button>
                                                 <button style={{ marginLeft: "10px" }} onClick={() => this.expoterPlanning(planning.id)} className="btn btn-danger">Export</button>
                                                 <button style={{ marginLeft: "10px" }} onClick={() => this.exportPDF(planning.id, 0)} className="btn btn-success">PlanningPDF</button>
                                                 <button style={{ marginLeft: "10px" }} onClick={() => this.exportPDF(planning.id, 1)} className="btn btn-success">EtudiantPDF</button>
                                                 <button style={{ marginLeft: "10px" }} onClick={() => this.exportPDF(planning.id, 2)} className="btn btn-success">TuteurPDF</button>
-
+                                                <button style={{ marginLeft: "10px" }} onClick={() => {
+                                                    if (window.confirm('Are you sure you wish to delete this item?'))
+                                                        this.deletePlanning(planning.id)
+                                                }} className="btn btn-danger">Delete</button>
                                             </td>
                                         </tr>
                                 )

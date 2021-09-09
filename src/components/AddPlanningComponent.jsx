@@ -75,7 +75,8 @@ class AddPlanningComponent extends Component {
         }
         else {//update
             PlanningService.updatePlanning(planning, this.state.id).then(res => {
-                this.props.history.push('/plannings/');
+                this.props.history.push(`/ViewPlanning/${this.state.id}`);
+                // this.props.history.push('/plannings/');
             });
         }
 
@@ -130,7 +131,7 @@ class AddPlanningComponent extends Component {
 
     render() {
         return (
-            <div>
+            <div> <br/>
                 <div className="container">
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">

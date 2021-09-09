@@ -107,7 +107,7 @@ class UpdatePhase extends Component {
     
     cancel() {
         this.props.history.goBack();
-        // this.props.history.push(`/ViewSeance/${this.state.seance.id}`);
+       // this.props.history.push(`/ViewSeance/${this.state.seance.id}`);
         
         
     }
@@ -123,7 +123,7 @@ class UpdatePhase extends Component {
         //let seances =SeanceService.getSeances();
 
         return (
-            <div>
+            <div><br/>
                 <div className="container">
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">

@@ -82,6 +82,7 @@ class ListSeanceComponent extends Component {
                                             <td>{seance.indicationEtudiant.length > limit ?
                                                 seance.indicationEtudiant.substring(0, limit) + dots : seance.indicationEtudiant
                                             }  </td>
+                                            
 
                                             <td>{seance.date} </td>
                                             <td>{seance.creneau} </td>

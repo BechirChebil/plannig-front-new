@@ -218,13 +218,14 @@ class ViewPlanningComponent extends Component {
                                         <td>{seance.creneau} </td>
 
                                         <td style={{ minWidth: "280px" }}>
-                                            <button onClick={() => this.editSeance(seance.id)} className="btn btn-info">Update</button>
+                                            <button style={{ marginLeft: "10px" }} onClick={() => this.viewSeance(seance.id)} className="btn btn-info">View</button>
+
+                                            <button style={{ marginLeft: "10px" }} onClick={() => this.editSeance(seance.id)} className="btn btn-info">Update</button>
+
                                             <button style={{ marginLeft: "10px" }} onClick={() => {
                                                 if (window.confirm('Are you sure you wish to delete this item?'))
                                                     this.deleteSeance(seance.id)
                                             }} className="btn btn-danger">Delete</button>
-                                            <button style={{ marginLeft: "10px" }} onClick={() => this.viewSeance(seance.id)} className="btn btn-info">View</button>
-
 
 
                                         </td>

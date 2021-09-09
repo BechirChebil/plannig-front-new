@@ -107,6 +107,7 @@ class AddSeance extends Component {
     }
 
     cancel() {
+        
         this.props.history.push(`/ViewPlanning/${this.state.planning.id}`);
     }
 
@@ -120,7 +121,7 @@ class AddSeance extends Component {
 
     render() {
         return (
-            <div>
+            <div><br/>
                 <div className="container">
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">

@@ -1,6 +1,12 @@
 .App {
   text-align: center;
-  font-family: sans-serif;
+  /* background-image:`url("https://images-cdn.welcomesoftware.com/Zz0zZTliMjQ4MzhlNGExMWViYmJiMjFiZTI2ZWNmN2MzZA==")`; */
+  /* background-image:url(https://images-cdn.welcomesoftware.com/Zz0zZTliMjQ4MzhlNGExMWViYmJiMjFiZTI2ZWNmN2MzZA==); */
+  /* min-width:100%;
+  min-height: 100%;
+  background-size: cover;
+  background-position: center;
+  font-family: sans-serif; */
 }
 
 .App-logo {

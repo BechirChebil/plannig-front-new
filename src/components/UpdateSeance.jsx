@@ -22,8 +22,9 @@ class UpdateSeance extends Component {
             indicationEtudiant: '',
 
             date: '',
-            creneau: ''
-            // planning: null,
+            creneau: '',
+            //planning: []
+             //planning: null,
             //plannings: []
         }
 
@@ -35,7 +36,7 @@ class UpdateSeance extends Component {
         this.changeDateHandler = this.changeDateHandler.bind(this);
         this.changeCreneauHandler = this.changeCreneauHandler.bind(this);
 
-
+        //this.cancel = this.cancel.bind(this);
         this.saveOrUpdateSeance = this.saveOrUpdateSeance.bind(this);
     }
 
@@ -52,7 +53,7 @@ class UpdateSeance extends Component {
                 indicationEtudiant: seance.indicationEtudiant,
                 date: seance.date,
                 creneau: seance.creneau,
-                //planning: seance.planning.id
+               // planning: seance.planning.id
             });
         });
 
@@ -117,7 +118,9 @@ class UpdateSeance extends Component {
    
     cancel() {
         
-     this.props.history.goBack();
+        // this.props.history.push(`/ViewSeance/${this.state.planning.id}`);
+            this.props.history.goBack();
+    //   this.props.history.push(`/ViewPlanning/${this.state.planning.id}`);
     }
 
     getTitle() {
@@ -130,7 +133,7 @@ class UpdateSeance extends Component {
 
     render() {
         return (
-            <div>
+            <div><br/>
                 <div className="container">
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">
